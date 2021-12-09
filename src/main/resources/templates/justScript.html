@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+</body>
+<script>
+    const imageFrame = document.getElementById("image-frame");
+
+    //const socket = new WebSocket("ws://195.2.92.124:80/socket");
+    const socket = new WebSocket("ws://localhost:8081/socket");
+    socket.binaryType = "arraybuffer";
+
+    socket.onopen = function (event) {
+        socket.send("Hey, send me some pictures");
+    };
+
+    socket.onmessage = function (event) {
+        if (event.data instanceof ArrayBuffer) {
+            setCurrentImage(event.data);
+        }
+    };
+
+    function setCurrentImage(image) {
+        imageFrame.src = URL.createObjectURL(new Blob([image]));
+    }
+</script>
+</html>
